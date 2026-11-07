@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:compileSdkVersion="34" android:compileSdkVersionCodename="14" package="com.licenseinjector.app" platformBuildVersionCode="34" platformBuildVersionName="14">
+    <application android:allowBackup="true" android:debuggable="true" android:extractNativeLibs="false" android:icon="@mipmap/ic_launcher" android:label="卡密工具箱">
+        <activity android:exported="true" android:label="卡密工具箱" android:name="com.licenseinjector.app.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:exported="false" android:label="卡密生成器" android:name="com.licenseinjector.app.GeneratorActivity"/>
+        <activity android:exported="false" android:label="卡密注入器" android:name="com.licenseinjector.app.InjectActivity"/>
+    </application>
+</manifest>

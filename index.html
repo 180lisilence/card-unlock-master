@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>解卡大师 Card Unlock Master v1.1</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --line:#2a3140;
+    --txt:#e6edf3; --muted:#9aa7b4; --accent:#ff6a3d; --accent2:#3da9ff;
+    --green:#3fb950; --yellow:#d29922; --purple:#a371f7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+       background:var(--bg);color:var(--txt);line-height:1.7;overflow-x:hidden}
+  a{color:var(--accent2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  header{position:relative;padding:70px 20px 60px;text-align:center;
+         background:radial-gradient(1200px 400px at 50% -10%,rgba(255,106,61,.18),transparent),var(--bg);
+         border-bottom:1px solid var(--line)}
+  .badge{display:inline-block;font-size:13px;color:var(--accent);border:1px solid var(--accent);
+         padding:3px 12px;border-radius:999px;margin-bottom:18px;letter-spacing:1px}
+  h1{font-size:44px;font-weight:800;letter-spacing:1px}
+  h1 .en{display:block;font-size:16px;font-weight:400;color:var(--muted);letter-spacing:3px;margin-top:8px}
+  .sub{color:var(--muted);margin-top:18px;font-size:15px;max-width:680px;margin-left:auto;margin-right:auto}
+  .ver{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .ver span{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 14px;font-size:13px}
+  .ver span b{color:var(--txt)}
+  section{padding:46px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:26px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+  h2 .n{color:var(--accent);font-size:18px;font-weight:700}
+  .lead{color:var(--muted);margin-bottom:24px}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;transition:.2s}
+  .card:hover{border-color:var(--accent);transform:translateY(-3px)}
+  .card h3{font-size:18px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .card h3 .tag{font-size:11px;padding:2px 8px;border-radius:6px;background:var(--accent);color:#fff}
+  .card ul{list-style:none;color:var(--muted);font-size:14px}
+  .card ul li{padding:4px 0 4px 18px;position:relative}
+  .card ul li:before{content:"▹";position:absolute;left:0;color:var(--accent)}
+  .table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+  .table th,.table td{border:1px solid var(--line);padding:10px 12px;text-align:left}
+  .table th{background:var(--panel2);color:var(--txt);font-weight:600}
+  .table tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+  code{background:var(--panel2);padding:2px 7px;border-radius:5px;font-size:13px;color:var(--accent2)}
+  pre{background:#0a0d12;border:1px solid var(--line);border-radius:10px;padding:16px;overflow:auto;font-size:13px;color:#c9d4e0}
+  .dl{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .dl a{display:block;background:var(--panel);border:1px solid var(--line);border-radius:12px;
+        padding:18px;color:var(--txt);transition:.2s}
+  .dl a:hover{border-color:var(--accent2);text-decoration:none;transform:translateY(-2px)}
+  .dl .name{font-weight:600;font-size:15px}
+  .dl .meta{color:var(--muted);font-size:12px;margin-top:6px}
+  .steps{counter-reset:s;list-style:none}
+  .steps li{counter-increment:s;position:relative;padding:10px 0 10px 46px;border-bottom:1px dashed var(--line)}
+  .steps li:before{content:counter(s);position:absolute;left:0;top:10px;width:30px;height:30px;
+        background:var(--accent);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .tree{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;color:var(--muted);
+        background:#0a0d12;border:1px solid var(--line);border-radius:10px;padding:16px;overflow:auto;white-space:pre}
+  .ok{color:var(--green);font-weight:600}
+  .note{background:rgba(210,153,34,.08);border:1px solid var(--yellow);border-radius:10px;padding:14px 18px;color:#e8d3a0;font-size:14px}
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:34px 20px}
+  footer a{color:var(--muted)}
+  @media(max-width:680px){.cards,.dl{grid-template-columns:1fr}h1{font-size:34px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">ANDROID · LICENSE BYPASS TOOLKIT</div>
+  <h1>解卡大师<span class="en">CARD UNLOCK MASTER · v1.1</span></h1>
+  <p class="sub">针对「卡密工具箱 v2.0」注入的 <code>com.license.verify2</code> 卡密模块的专用解除工具。提供<b>一键发卡</b>与<b>一键破解</b>两条独立路径，手机端离线完成全部工作。</p>
+  <div class="ver">
+    <span>包名 <b>com.crackmaster.app</b></span>
+    <span>最低系统 <b>Android 7.0</b></span>
+    <span>签名 <b>v2 + v3</b></span>
+    <span>SHA-256 <b>3a22b9…b1d7a</b></span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section id="what">
+    <h2><span class="n">01</span>这是什么</h2>
+    <p class="lead">「卡密工具箱」是一个给任意 APK 注入卡密锁的工具，其注入机制为：</p>
+    <ul class="steps">
+      <li>把验证代码 <code>assets/payload.dex</code>（含 <code>com.license.verify2.*</code> 8 个类）作为 <code>classesN.dex</code> 塞进目标 APK；</li>
+      <li>用 AXML 改写把 <code>VerifyActivity</code> 设为启动页；</li>
+      <li>写入 <code>assets/license_cfg.txt</code>（含共享密钥 <code>key=</code> 与原启动页 <code>target=</code>）；</li>
+      <li>用内置 <code>assets/inject.p12</code> 对 APK 重新签名（v1+v2+v3）。</li>
+    </ul>
+    <p class="lead" style="margin-top:18px">被注入的 App 启动时先过卡密校验：<b>算法</b>、<b>设备指纹</b>、<b>HMAC 校验段</b>三重比对，全对才放行。解卡大师针对这一套机制，提供两条独立的解除路径。</p>
+  </section>
+
+  <section id="modes">
+    <h2><span class="n">02</span>两条解除路径</h2>
+    <p class="lead">选择被锁 APK 后，App 会自动识别并提取密钥，你只需选一条路径。</p>
+    <div class="cards">
+      <div class="card">
+        <h3>方式 A · 一键发卡 <span class="tag">推荐</span></h3>
+        <p style="color:var(--muted);font-size:14px;margin-bottom:10px">不改目标 APK，生成终身卡密填回即可。</p>
+        <ul>
+          <li>密钥自动从 <code>license_cfg.txt</code> 提取填入</li>
+          <li>填入被锁 App 弹窗显示的 16 位设备码</li>
+          <li>选格式/长度，生成 1/3/5/10 张终身卡</li>
+          <li>粘回被锁 App → <b>永久激活</b></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>方式 B · 一键破解</h3>
+        <p style="color:var(--muted);font-size:14px;margin-bottom:10px">免卡密，对目标 APK 原地补丁并重签名。</p>
+        <ul>
+          <li>扫描 → 字节补丁 → 重打包 → 签名</li>
+          <li>装好后直达原功能页，<b>无任何卡密弹窗</b></li>
+          <li>必须先卸载原版（签名不同）</li>
+          <li>v1.1 支持确认后一键卸载原版</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="diff">
+    <h2><span class="n">03</span>两条路径怎么选</h2>
+    <table class="table">
+      <tr><th></th><th>方式 A 发卡</th><th>方式 B 破解</th></tr>
+      <tr><td>目标 APK</td><td>不动</td><td>被重打包并重签名</td></tr>
+      <tr><td>原 App 签名</td><td>保留（可覆盖升级）</td><td>失效（须先卸载）</td></tr>
+      <tr><td>使用体验</td><td>每次启动可能仍要看卡密</td><td>彻底无感</td></tr>
+      <tr><td>适合</td><td>临时用、想保留原版</td><td>长期用、懒得再输</td></tr>
+    </table>
+    <p class="lead" style="margin-top:16px"><b>建议：</b>先用 A 验证卡密确实通用，确认没问题再上 B。</p>
+  </section>
+
+  <section id="how">
+    <h2><span class="n">04</span>破解原理（二次开发参考）</h2>
+    <p class="lead">只改 <code>com.license.verify2.LicenseVerify</code> 里三个方法，把方法体开头覆写成：</p>
+    <pre>const/4 v0, 1      ; 12 10
+return v0          ; 0f 00</pre>
+    <table class="table">
+      <tr><th>方法</th><th>签名</th><th>作用</th></tr>
+      <tr><td><code>isValid</code></td><td><code>(Landroid/content/Context;)Z</code></td><td>App 内主动查是否已授权</td></tr>
+      <tr><td><code>verifyInternal</code></td><td><code>(String,String,CardFormat,CardLength)Z</code></td><td>卡密核心校验（指纹段 + HMAC 段）</td></tr>
+      <tr><td><code>isExpired</code></td><td><code>(String,String,JJ)Z</code></td><td>到期判断</td></tr>
+    </table>
+    <p class="lead" style="margin-top:16px">三者恒返回 <code>true</code> → 任何卡密都通过、授权永不过期。</p>
+    <div class="note" style="margin-top:16px">
+      <b>关键工程决策：</b>① 绝不缩短 <code>insns_size</code>，用 <code>nop</code> 填满剩余槽位保持 4 字节对齐；② 必须重算 dex 的 SHA-1 签名与 Adler32 校验和；③ 将 <code>com.android.apksig</code> 全量 709 个 class 编译进 dex，手机端独立完成 v1+v2+v3 签名；④ 纯字节手术解析 dex，不依赖 smali。
+    </div>
+  </section>
+
+  <section id="verify">
+    <h2><span class="n">05</span>验证结果</h2>
+    <table class="table">
+      <tr><th>验证项</th><th>结果</th></tr>
+      <tr><td>Keygen 与原始 <code>LicenseVerify</code> 交叉验证</td><td class="ok">12/12 通过</td></tr>
+      <tr><td>E2E 破解流水线（合成被锁 APK 全流程）</td><td class="ok">9/9 通过</td></tr>
+      <tr><td>真实 <code>payload.dex</code> 双链路闭环</td><td class="ok">11/11 通过</td></tr>
+      <tr><td><code>dexdump</code> 校验补丁后 dex</td><td class="ok">PASS（rc=0）</td></tr>
+      <tr><td>反汇编确认三方法指令头</td><td><code>1210 const/4 v0,1</code> + <code>0f00 return v0</code></td></tr>
+      <tr><td>产物 <code>apksigner verify</code></td><td class="ok">Verifies（v2=true v3=true）</td></tr>
+      <tr><td>产物 <code>zipalign -c 4</code></td><td class="ok">PASS</td></tr>
+    </table>
+  </section>
+
+  <section id="src">
+    <h2><span class="n">06</span>源码结构</h2>
+    <div class="tree">crackmaster/
+├─ AndroidManifest.xml
+├─ assets/crack.keystore           自签名密钥库（PKCS12, alias=crackmaster）
+├─ src/com/crackmaster/app/
+│  ├─ MainActivity.java    全代码 UI（无布局 XML）
+│  ├─ CrackEngine.java     破解编排：扫描 → 补丁 → 重打包 → 签名
+│  ├─ DexPatcher.java      dex 字节手术（核心）
+│  ├─ CardFactory.java     卡密算法 1:1 移植 + 终身卡生成
+│  ├─ ApkAnalyzer.java     APK 分析：定位验证 dex、提取密钥
+│  ├─ Signer.java          apksig v1+v2+v3 签名封装
+│  ├─ CrackProvider.java   自实现 ContentProvider（开放产物给安装器）
+│  ├─ AxmlReader.java      二进制 AXML 解析器，提取真实包名/应用名
+│  └─ OriginalApp.java     原版检测与卸载
+├─ src/com/licenseinjector/app/core/ZipRewriter.java   ZIP 重写（含 .so 16KB 对齐）
+└─ lib_apksig/            apksig 709 个 class（编译进 dex）</div>
+  </section>
+
+  <section id="download">
+    <h2><span class="n">07</span>下载</h2>
+    <p class="lead">把 APK 传到手机点击安装（需允许「安装未知来源应用」）。</p>
+    <div class="dl">
+      <a href="https://github.com/180lisilence/card-unlock-master/raw/main/%E8%A7%A3%E5%8D%A1%E5%A4%A7%E5%B8%88-v1.1.apk">
+        <div class="name">解卡大师 v1.1（推荐）</div>
+        <div class="meta">含一键卸载原版 · versionCode 2 · v2+v3 签名</div>
+      </a>
+      <a href="https://github.com/180lisilence/card-unlock-master/raw/main/%E8%A7%A3%E5%8D%A1%E5%A4%A7%E5%B8%88-v1.0.apk">
+        <div class="name">解卡大师 v1.0</div>
+        <div class="meta">基础版 · versionCode 1</div>
+      </a>
+      <a href="https://github.com/180lisilence/card-unlock-master/raw/main/%E5%8D%A1%E5%AF%86%E5%B7%A5%E5%85%B7%E7%AE%B1-v2.0-com.licenseinjector.app.apk">
+        <div class="name">卡密工具箱 v2.0</div>
+        <div class="meta">被注入的样本 / 对照参考（com.licenseinjector.app）</div>
+      </a>
+      <a href="https://github.com/180lisilence/card-unlock-master/blob/main/%E8%A7%A3%E5%8D%A1%E5%A4%A7%E5%B8%88-%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E.md">
+        <div class="name">完整使用说明</div>
+        <div class="meta">安装 / 三步用法 / 原理 / 注意事项</div>
+      </a>
+    </div>
+  </section>
+
+  <section id="notes">
+    <h2><span class="n">08</span>注意事项</h2>
+    <ul class="steps">
+      <li>必须先卸载原版再装破解版：签名不同，否则安装失败。</li>
+      <li>破解版 APK 与原版不能共存，也不能互相覆盖升级。</li>
+      <li>目标 APK 体积较大时（&gt;200MB），方式 B 需在存储空间充足的设备上执行。</li>
+      <li>方式 A 若提示设备码非法，检查是否复制了多余空格或少了字符（须正好 16 位大写字母/数字）。</li>
+      <li>若 APK 分析显示「未识别到 verify2 模块」，说明该 App 不是本工具注入的，方式 A/B 均不适用。</li>
+    </ul>
+  </section>
+
+</div>
+
+<footer>
+  <p>解卡大师 · Card Unlock Master · MIT License · <a href="https://github.com/180lisilence/card-unlock-master">github.com/180lisilence/card-unlock-master</a></p>
+  <p style="margin-top:6px">仅供授权资产的本地工程研究与个人使用。</p>
+</footer>
+
+</body>
+</html>

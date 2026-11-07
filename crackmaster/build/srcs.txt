@@ -1,0 +1,10 @@
+src/com/crackmaster/app/ApkAnalyzer.java
+src/com/crackmaster/app/AxmlReader.java
+src/com/crackmaster/app/CardFactory.java
+src/com/crackmaster/app/CrackEngine.java
+src/com/crackmaster/app/CrackProvider.java
+src/com/crackmaster/app/DexPatcher.java
+src/com/crackmaster/app/MainActivity.java
+src/com/crackmaster/app/OriginalApp.java
+src/com/crackmaster/app/Signer.java
+src/com/licenseinjector/app/core/ZipRewriter.java
